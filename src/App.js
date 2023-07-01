@@ -1,24 +1,37 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect, useState } from 'react';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import Home from './pages/Home';
+import Form from './components/Users/form';
+import Navbar from './components/SidebarData/Navbar';
 
 function App() {
+  const storedUser = localStorage.getItem('user');
+  const [user, setUser] = useState(storedUser ? JSON.parse(storedUser) : null);
+
+
+  useEffect(() => {
+    if (storedUser) {
+      setUser(JSON.parse(storedUser));
+    }
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem('user', JSON.stringify(user));
+  }, [user]);
+
+  const handleLogout = () => {
+    setUser(null);
+    localStorage.removeItem('user');
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <Navbar user={user} onLogout={handleLogout} />
+      <Routes>
+        <Route exact path="/login" element={<Form setUser={setUser} />} />
+        <Route exact path="/" element={<Home user={user} />} />
+      </Routes>
+    </Router>
   );
 }
 
