@@ -22,7 +22,7 @@ function Index({ refresh, setRefresh }) {
 
 	return (
 		<>
-			<h2 style={{ margin: "4px" }}>Lista de Ordenes</h2>
+			<h2 style={{ margin: '15px', color: '#7D8283'}}>Lista de Ordenes</h2>
 			<LoadingList isLoading={loading} contents={contents} />
 		</>
 	)

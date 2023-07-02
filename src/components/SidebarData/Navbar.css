@@ -1,5 +1,5 @@
 .navbar {
-    background-color: #060b26;
+    background-color: #3B495B;
     height: 80px;
     display: flex;
     justify-content: start;
@@ -10,6 +10,11 @@
     margin-left: 2rem;
     font-size: 2rem;
     background: none;
+  }
+  .navbar-title {
+    color: white !important;
+    font-size: 30px;
+    margin-left: 15px
   }
   
   .nav-menu {
@@ -69,8 +74,4 @@
   
   span {
     margin-left: 16px;
-  }
-
-  .navbar-exit {
-    margin-left: 1100px;
   }

@@ -1,60 +1,44 @@
-import React, { useState } from 'react';
-import * as FaIcons from 'react-icons/fa';
-import * as AiIcons from 'react-icons/ai';
+import React from 'react';
+import { Navbar, Nav, Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-import { SidebarData } from './SidebarData';
 import './Navbar.css';
-import { IconContext } from 'react-icons';
 
-function Navbar({ user, onLogout }) {
-  const [sidebar, setSidebar] = useState(false);
-
-  const showSidebar = () => setSidebar(!sidebar);
-
+function CustomNavbar({ user, onLogout }) {
   const handleLogout = () => {
     onLogout();
   };
 
   return (
-    <>
-      <IconContext.Provider value={{ color: '#fff' }}>
-        <div className='navbar'>
-          <Link to='#' className='menu-bars'>
-            <FaIcons.FaBars onClick={showSidebar} />
-          </Link>
-          <div className="navbar-title">Cocina</div>
-          <div className="navbar-exit">
-            <ul>
-              {user && (
-                <li style={{ display: 'inline-block', marginTop: '5px'}}>
-                  <button onClick={handleLogout}>Logout</button>
-                </li>
-              )}
-            </ul>
-          </div>
-        </div>
-        <nav className={sidebar ? 'nav-menu active' : 'nav-menu'}>
-          <ul className='nav-menu-items' onClick={showSidebar}>
-            <li className='navbar-toggle'>
-              <Link to='#' className='menu-bars'>
-                <AiIcons.AiOutlineClose />
-              </Link>
-            </li>
-            {SidebarData.map((item, index) => {
-              return (
-                <li key={index} className={item.cName}>
-                  <Link to={item.path}>
-                    {item.icon}
-                    <span>{item.title}</span>
-                  </Link>
-                </li>
-              );
-            })}
-          </ul>
-        </nav>
-      </IconContext.Provider>
-    </>
+    <Navbar expand="lg" variant="dark">
+      <Link to="/" className="navbar-brand me-2 navbar-title h1">
+        Cocina
+      </Link>
+      <Navbar.Toggle aria-controls="navbarNav" />
+      <Navbar.Collapse id="navbarNav">
+        {user && (
+          <>
+            <Nav className="ml-auto">
+              <Nav.Item>
+                <Nav.Link as={Link} to="/" className="nav-link">
+                  Inicio
+                </Nav.Link>
+              </Nav.Item>
+              <Nav.Item>
+                <Nav.Link as={Link} to="/" className="nav-link">
+                  About
+                </Nav.Link>
+              </Nav.Item>
+            </Nav>
+            <Nav className="navbar-nav ms-auto">
+              <Button variant="outline-light" style={{ marginRight: '15px' }} onClick={handleLogout}>
+                Cerrar sesión
+              </Button>
+            </Nav>
+          </>
+        )}
+      </Navbar.Collapse>
+    </Navbar>
   );
 }
 
-export default Navbar;
+export default CustomNavbar;
