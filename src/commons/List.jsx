@@ -7,6 +7,8 @@ import { putFetch } from './ApiMethods';
 const List = ({ contents }) => {
   const [orders, setOrders] = useState([]);
   const [lastDeliveredOrder, setLastDeliveredOrder] = useState(null);
+  const maxOrdersToShow = 5;
+  const [showMoreOrders, setShowMoreOrders] = useState(false);
 
   const colorTh = '#7D8283';
   const colorTd = '#EDF0ED';
@@ -18,14 +20,15 @@ const List = ({ contents }) => {
   };
 
   useEffect(() => {
-    setOrders(contents);
+    setOrders(contents.slice(0, maxOrdersToShow));
+    setShowMoreOrders(contents.length > maxOrdersToShow);
   }, [contents]);
 
   const handleOrderUpdate = async (orderId) => {
     try {
       const updatedOrders = orders.map(order => {
         if (order.id === orderId) {
-          setLastDeliveredOrder(order); 
+          setLastDeliveredOrder(order);
           return { ...order, state: 'delivered' };
         }
         return order;
@@ -48,13 +51,13 @@ const List = ({ contents }) => {
 
       const updatedOrders = orders.map(order => {
         if (order.id === orderId) {
-          return { ...order, state: previousState }; 
+          return { ...order, state: previousState };
         }
         return order;
       });
 
       await putFetch(`api/orders/${orderId}`, {
-        state: previousState 
+        state: previousState
       });
 
       setOrders(updatedOrders);
@@ -91,13 +94,28 @@ const List = ({ contents }) => {
             }
 
             const stateText = statesTxt[state] || state;
+            let stateColor = '';
+
+            switch (state) {
+              case 'on_Time':
+                stateColor = 'green';
+                break;
+              case 'late':
+                stateColor = 'red';
+                break;
+              case 'delayed':
+                stateColor = 'yellow';
+                break;
+              default:
+                break;
+            }
 
             return (
               <tr key={id}>
                 <td style={{ backgroundColor: colorTd }}>{id}</td>
                 <td style={{ backgroundColor: colorTd }}>{client.first_name + ' ' + client.last_name}</td>
                 <td style={{ backgroundColor: colorTd }}>{created_at}</td>
-                <td style={{ backgroundColor: colorTd }}>{stateText}</td>
+                <td style={{ backgroundColor: colorTd, color: stateColor }}>{stateText}</td>
                 <td style={{ backgroundColor: colorTd }}>{dishes}</td>
                 <td style={{ backgroundColor: colorTd }}>
                   <button className='btn btn-primary' onClick={() => handleOrderUpdate(id)}>
@@ -118,7 +136,9 @@ const List = ({ contents }) => {
           )}
         </tbody>
       </Table>
-      <br />
+      {showMoreOrders && (
+        <p>Hay más órdenes disponibles</p>
+      )}
     </div>
   );
 };
