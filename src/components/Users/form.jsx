@@ -18,7 +18,6 @@ function Form({ setUser }) {
           password: password,
         },
       }).then((response) => {
-        console.log(response);
         setEmail('');
         setPassword('');
 

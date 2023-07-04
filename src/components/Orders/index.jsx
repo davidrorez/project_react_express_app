@@ -14,11 +14,12 @@ function Index({ refresh, setRefresh }) {
 		if (!refresh) return
 		setLoading(true);
 		getFetch('api/orders').then((data) => {
+			console.log(data);
 			setContents(data);
 			setLoading(false);
 		});
 		setRefresh(false)
-	}, [setContents, setLoading, refresh]);
+	}, [setContents, contents, setLoading, refresh]);
 
 	return (
 		<>
