@@ -3,7 +3,7 @@ import Table from 'react-bootstrap/Table';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../App.css';
 import { putFetch } from './ApiMethods';
-import cable from './ActionCable';
+//import cable from './ActionCable';
 
 
 const List = ({ contents }) => {
@@ -20,27 +20,6 @@ const List = ({ contents }) => {
     late: 'Demorado',
     delayed: 'Sobre tiempo'
   };
-
-  useEffect(() => {
-    cable.subscriptions.create('OrdersChannel', {
-      received: (data) => {
-        console.log(data)
-        if (Array.isArray(data)) {
-
-          setOrders(data)
-
-        }
-
-      },
-      connected: () => {
-        console.log('Conectado al canal de órdenes.');
-      },
-      disconnected: () => {
-        console.log('Desconectado del canal de órdenes.');
-      }
-    });
-  }, []);
-  
 
   useEffect(() => {
     setOrders(contents.slice(0, maxOrdersToShow));
