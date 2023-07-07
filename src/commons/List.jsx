@@ -6,6 +6,7 @@ import { putFetch } from './ApiMethods';
 
 const List = ({ contents }) => {
   const [orders, setOrders] = useState([]);
+  const [lastDeliveredOrder, setLastDeliveredOrder] = useState(null);
 
   const colorTh = '#7D8283';
   const colorTd = '#EDF0ED';
@@ -22,16 +23,42 @@ const List = ({ contents }) => {
 
   const handleOrderUpdate = async (orderId) => {
     try {
-      await putFetch(`api/orders/${orderId}`, {
-        state: 'delivered'
-      });
       const updatedOrders = orders.map(order => {
         if (order.id === orderId) {
+          setLastDeliveredOrder(order); 
           return { ...order, state: 'delivered' };
         }
         return order;
       });
+
+      await putFetch(`api/orders/${orderId}`, {
+        state: 'delivered'
+      });
+
       setOrders(updatedOrders);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleUndoDeliver = async () => {
+    try {
+      const orderId = lastDeliveredOrder.id;
+      const previousState = lastDeliveredOrder.state;
+
+      const updatedOrders = orders.map(order => {
+        if (order.id === orderId) {
+          return { ...order, state: previousState }; 
+        }
+        return order;
+      });
+
+      await putFetch(`api/orders/${orderId}`, {
+        state: previousState 
+      });
+
+      setOrders(updatedOrders);
+      setLastDeliveredOrder(null);
     } catch (error) {
       console.log(error);
     }
@@ -63,7 +90,7 @@ const List = ({ contents }) => {
               return null;
             }
 
-            const stateText = (statesTxt[state]) ? statesTxt[state] : state;
+            const stateText = statesTxt[state] || state;
 
             return (
               <tr key={id}>
@@ -80,6 +107,15 @@ const List = ({ contents }) => {
               </tr>
             );
           })}
+          {lastDeliveredOrder && (
+            <tr>
+              <td colSpan="6">
+                <button className="btn btn-secondary" onClick={handleUndoDeliver}>
+                  Deshacer entrega de la última orden
+                </button>
+              </td>
+            </tr>
+          )}
         </tbody>
       </Table>
       <br />
@@ -87,4 +123,4 @@ const List = ({ contents }) => {
   );
 };
 
-export default List;
+export default List;
