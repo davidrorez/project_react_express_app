@@ -10,21 +10,13 @@ function Index({ refresh, setRefresh }) {
 	const LoadingList = WithLoadingState(List);
 	const [contents, setContents] = useState([]);
 	const [loading, setLoading] = useState(false);
-	let cable;
 
 	useEffect(() => {
-		cable = ActionCable.createConsumer('ws://localhost:3000/cable');
+		const cable = ActionCable.createConsumer('ws://localhost:3000/cable');
 
 		const receivedHandler = (data) => {
-			setContents((prevContents) => {
-				console.log(prevC)
-				const updatedContents = [...prevContents];
-				const index = updatedContents.findIndex((content) => content.id === data.id);
-				if (index !== -1) {
-					updatedContents[index] = data;
-				}
-				return updatedContents;
-			});
+			setContents(data);
+			setRefresh(true);
 		};
 
 		cable.subscriptions.create({ channel: 'OrdersChannel' }, { received: receivedHandler });
@@ -45,7 +37,7 @@ function Index({ refresh, setRefresh }) {
 		});
 
 		setRefresh(false);
-	}, [refresh]);
+	}, [refresh, setRefresh]);
 
 	return (
 		<>
