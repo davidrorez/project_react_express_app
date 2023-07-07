@@ -1,17 +1,19 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Navigate } from 'react-router-dom';
+import Index from '../components/Orders';
+import '../App.css'
 
 function Home({ user }) {
-  
+  const [refresh, setRefresh] = useState(true);
 
-	if (!user) {
 
-		return <Navigate to='/login'/>
-	} else {
+  if (!user) {
+    return <Navigate to='/login' />
+
+  } else {
 
     return (
-
-      <h1>Aqui va el index de las ordenes</h1>
+      <Index setRefresh={setRefresh} refresh={refresh} />
     )
   }
 }
