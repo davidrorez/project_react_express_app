@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Home from './pages/Home';
 import Form from './components/Users/form';
-import Navbar from './components/SidebarData/Navbar';
+import Navbar from './components/Navbar/Navbar';
 
 function App() {
   const storedUser = localStorage.getItem('user');
