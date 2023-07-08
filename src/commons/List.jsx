@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Table from 'react-bootstrap/Table';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import '../App.css';
-import { putFetch } from './ApiMethods';
 
 const List = ({ contents }) => {
   const [orders, setOrders] = useState([]);
