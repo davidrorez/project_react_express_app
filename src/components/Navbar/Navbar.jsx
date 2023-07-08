@@ -23,11 +23,6 @@ function CustomNavbar({ user, onLogout }) {
                   Inicio
                 </Nav.Link>
               </Nav.Item>
-              <Nav.Item>
-                <Nav.Link as={Link} to="/" className="nav-link">
-                  About
-                </Nav.Link>
-              </Nav.Item>
             </Nav>
             <Nav className="navbar-nav ms-auto">
               <Button
